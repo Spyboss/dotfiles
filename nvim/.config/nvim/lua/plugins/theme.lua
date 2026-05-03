@@ -1,0 +1,1 @@
+/home/uminda/.config/omarchy/current/theme/neovim.lua
