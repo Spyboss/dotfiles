@@ -1,0 +1,4 @@
+opencode/.config/opencode/node_modules/
+opencode/.config/opencode/bun.lock
+opencode/.config/opencode/package-lock.json
+*.bak
