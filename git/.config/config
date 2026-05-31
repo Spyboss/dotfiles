@@ -5,8 +5,15 @@
 	br = branch
 	ci = commit
 	st = status
+	cob = checkout -b       # Create & switch to new branch
+	lg = log --oneline --graph --decorate --all -15
+	undo = reset HEAD~1 --mixed  # Undo last commit, keep changes
+	amend = commit --amend --no-edit  # Add to last commit
+	re = restore
+	rs = restore --staged
+	fixup = commit --fixup  # Mark as fixup for interactive rebase
 [init]
-	defaultBranch = master
+	defaultBranch = main
 [pull]
 	rebase = true 			 # Rebase (instead of merge) on pull
 [push]
