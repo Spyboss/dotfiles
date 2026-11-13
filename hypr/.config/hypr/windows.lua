@@ -33,6 +33,8 @@ o.window({ class = "^herdr-app$" }, { workspace = "8" })
 o.window({ class = "^spotify$" }, { workspace = "9" })
 o.window({ class = "^org\\.omarchy\\.cliamp$" }, { workspace = "9" })
 
--- Telegram: kept apart from WhatsApp and Signal. Class is TelegramDesktop
--- because this install is the manual tarball build, not the flatpak.
-o.window({ class = "^TelegramDesktop$" }, { workspace = "10" })
+-- Telegram: kept apart from WhatsApp and Signal.
+-- The real Wayland class is the desktop-entry id, hash suffix and all:
+--   org.telegram.desktop._56de1caa675984f621cedee111b9c138
+-- TelegramDesktop is only the X11 name, so it is kept as a fallback.
+o.window({ class = "^(TelegramDesktop|org\\.telegram\\.desktop.*)$" }, { workspace = "10" })

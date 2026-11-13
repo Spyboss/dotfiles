@@ -180,12 +180,21 @@ Matching is against the window **class** unless noted.
 | 7c | `^omawrite$` | ws 7 | Omawrite |
 | 8 | `^herdr-app$` | ws 8 | Herdr desktop app, always |
 | 9 | `^spotify$` + `^org\.omarchy\.cliamp$` | ws 9 | Spotify and cliamp, wherever opened from |
-| 10 | `^TelegramDesktop$` | ws 10 | Telegram, kept apart from WhatsApp and Signal |
+| 10 | `^(TelegramDesktop\|org\.telegram\.desktop.*)$` | ws 10 | Telegram, kept apart from WhatsApp and Signal |
 
-Telegram's class is `TelegramDesktop`, not the usual `org.telegram.desktop`,
-because this install is the manual tarball build (`~/Downloads/tsetup.6.6.2/`),
-not the flatpak. Reinstalling it as a flatpak would change the class and the
-rule would stop matching.
+Telegram's real Wayland class is the desktop-entry id, hash and all:
+`org.telegram.desktop._56de1caa675984f621cedee111b9c138`. The `.desktop` file's
+`StartupWMClass=TelegramDesktop` is the X11 name and does not match on Wayland,
+so `TelegramDesktop` is kept only as a fallback.
+
+**Window rules match case-insensitively.** Verified: class `Spotify` is caught by
+the rule `^spotify$`. The `[Tt]`, `[Aa]` bracket patterns in the older rules are
+harmless but unnecessary.
+
+**`StartupWMClass` in a `.desktop` file is not the Wayland class.** Check the
+real one with `hyprctl clients`. Verified live classes: `google-chrome`, `foot`,
+`org.gnome.Nautilus`, `mpv`, `signal`, `md.obsidian.Obsidian`, `typora`,
+`omawrite`, `herdr-app`, `Spotify`, `org.omarchy.cliamp`.
 
 Not mapped: Slack, and the ChatGPT webapp (opens on the current workspace).
 
