@@ -7,8 +7,8 @@ Generated from the live compositor, not from memory:
 
 Hyprland 0.56.2, Omarchy 4.5.0-3, config provider: **lua**.
 
-Your `~/.config/hypr/bindings.lua` contains **no personal bindings** — every
-binding below is an Omarchy default. So "my shortcuts" = stock Omarchy.
+Your `~/.config/hypr/bindings.lua` holds one personal binding (SUPER SHIFT + H).
+Everything else below is an Omarchy default.
 
 ---
 
@@ -22,6 +22,7 @@ binding below is an Omarchy default. So "my shortcuts" = stock Omarchy.
 | SUPER SHIFT ALT + B | Browser (private) | `omarchy-launch-browser --private` |
 | SUPER SHIFT + F | File manager | `omarchy-launch-nautilus` |
 | SUPER SHIFT ALT + F | File manager (cwd) | `omarchy-launch-nautilus-cwd` |
+| SUPER SHIFT + H | Herdr | `omarchy-launch-terminal-herdr` (also on SUPER CTRL + RETURN) |
 | SUPER ALT + RETURN | Tmux | `omarchy-launch-terminal-tmux` |
 | SUPER CTRL + RETURN | Herdr | `omarchy-launch-terminal-herdr` |
 | SUPER SHIFT + N | Editor | `omarchy-launch-editor` |
@@ -168,22 +169,30 @@ Matching is against the window **class** unless noted.
 
 | # | Rule (class regex) | Target | Actually matches |
 |---|---|---|---|
-| 1 | `^(google-chrome\|chromium\|firefox)$` | ws 1 | Chrome ✓ |
-| 2 | `.*[Aa]lacritty\|.*[Gg]hostty\|.*[Kk]itty\|.*[Ff]oot` | ws 2 | foot ✓ |
-| 3 | `.*[Nn]autilus\|.*[Ff]iles` | ws 3 | org.gnome.Nautilus ✓ |
-| 4 | `.*[Cc]hat.*\|.*[Oo]pencode` | ws 4 | ChatGPT webapp only |
-| 5 | `.*[Ww]hatsapp.*\|.*[Ss]ignal\|.*[Tt]elegram` | ws 5 | WhatsApp webapp ✓ |
-| 5b | title `.*[Ww]hatsapp.*` | ws 5 | redundant, rule 5 already covers it |
+| 1 | `^(google-chrome\|chromium\|firefox)$` | ws 1 | Chrome |
+| 2 | `.*[Aa]lacritty\|.*[Gg]hostty\|.*[Kk]itty\|.*[Ff]oot` | ws 2 | foot, and every TUI run inside it |
+| 3 | `.*[Nn]autilus\|.*[Ff]iles` | ws 3 | org.gnome.Nautilus |
+| 4 | `.*[Cc]hat.*\|.*[Oo]pencode` | ws 4 | ChatGPT webapp |
+| 5 | `.*[Ww]hatsapp.*\|.*[Ss]ignal\|.*[Tt]elegram` | ws 5 | WhatsApp webapp, Signal |
+| 5b | `.*[Dd]iscord.*` | ws 5 | Discord webapp |
 | 6 | `.*[Dd]ocker` | ws 6 | `org.omarchy.omarchy-launch-docker-tui` |
-| 7 | `.*[Oo]bs.*` | ws 7 | obsidian, obs-studio, anything containing "obs" |
+| 7 | `.*[Oo]bs.*` | ws 7 | obsidian, and anything containing "obs" |
+| 7b | `^[Tt]ypora$` | ws 7 | Typora |
+| 7c | `^omawrite$` | ws 7 | Omawrite |
+| 7d | `^(1Password\|1password\|com\.onepassword\.OnePassword)$` | ws 7 | 1Password, when installed |
+| 8 | `^herdr-app$` + `^org\.omarchy\.herdr$` | ws 8 | Herdr, always |
+| 9 | `^spotify$` + `^org\.omarchy\.cliamp$` | ws 9 | Spotify and cliamp, wherever opened from |
+
+Not mapped: mpv, Slack (no rule, they open on the current workspace).
 
 ## 7. Problems found
 
-**Dead files (not read at all).** Config provider is `lua`, so these are inert:
-`hyprland.conf`, `bindings.conf`, `input.conf`, `looknfeel.conf`, `monitors.conf`,
-`autostart.conf`, `clipboard.conf` + 8 `*.bak.*` files. Their content is NOT
-applied — e.g. `bindings.conf` says SUPER SHIFT + W is Typora, the live binding
-is Omawrite.
+**Dead files, now archived.** Config provider is `lua`, so `.conf` files were
+inert. Moved to `~/.config/hypr/archive-pre-quattro-20261113/`:
+`hyprland.conf`, `bindings.conf`, `input.conf`, `looknfeel.conf`,
+`monitors.conf`, `autostart.conf`, `clipboard.conf` and 9 `*.bak.*` files.
+Still live: `hypridle.conf`, `hyprlock.conf`, `hyprsunset.conf`, `xdph.conf`
+(read by their own programs, not by Hyprland).
 
 **Rule 4 can't work for opencode.** `opencode` runs inside foot, whose class is
 `foot`, so it hits rule 2 (ws 2) first. A class rule can never separate two
@@ -191,15 +200,14 @@ terminals. Terminal apps launched via `omarchy-launch-tui` get their own class
 (`org.omarchy.<name>`), which is the only way to map them.
 
 **Rule 7 is over-broad.** `.*[Oo]bs.*` matches any class containing "obs".
+Left as-is deliberately.
 
 **No `silent` on any rule.** Opening a matched app switches you to that
 workspace. Omarchy's own rules use `workspace = "N silent"` when they don't
 want to steal focus.
 
-**Rule 5b is redundant** with rule 5.
-
-**Not mapped at all:** herdr, Spotify, Typora, 1Password, Discord, omawrite,
-cliamp. (Signal desktop is covered by rule 5.)
+**`SUPER SHIFT + SLASH` (Passwords) points at 1Password, which is not
+installed.** The key currently does nothing.
 
 **`ALT + TAB` has two bindings** — `cycle_next` then `bring_to_top`. That is
 deliberate upstream (see `bindings/tiling.lua:56-60`), not a bug.

@@ -1,23 +1,36 @@
--- Restore auto-positioning window rules from the pre-Quattro dotfiles setup.
--- Old .conf equivalents (hyprland.conf.bak.1785607683):
---   windowrule = workspace 1, match:class ^(google-chrome|chromium|firefox)$
---   windowrule = workspace 2, match:class .*[Aa]lacritty|.*[Gg]hostty|.*[Kk]itty
---   windowrule = workspace 4, match:class .*[Cc]hat.*|.*[Oo]pencode
---   windowrule = workspace 5, match:class .*[Ww]hatsapp.*|.*[Ss]ignal|.*[Tt]elegram
---   windowrule = workspace 6, match:class .*[Dd]ocker
---   windowrule = workspace 7, match:class .*[Oo]bsidian|.*[Tt]ypora
+-- Auto-placement: which workspace each app opens on.
+-- Loaded after Omarchy's defaults, so these win.
+-- Matching is against the window class (find it with: hyprctl clients).
 
+-- Browser
 o.window({ class = "^(google-chrome|chromium|firefox)$" }, { workspace = "1" })
 
+-- Terminals
 o.window({ class = ".*[Aa]lacritty|.*[Gg]hostty|.*[Kk]itty|.*[Ff]oot" }, { workspace = "2" })
 
+-- Files
 o.window({ class = ".*[Nn]autilus|.*[Ff]iles" }, { workspace = "3" })
 
+-- Chat and agents
 o.window({ class = ".*[Cc]hat.*|.*[Oo]pencode" }, { workspace = "4" })
 
+-- Messaging
 o.window({ class = ".*[Ww]hatsapp.*|.*[Ss]ignal|.*[Tt]elegram" }, { workspace = "5" })
-o.window({ title = ".*[Ww]hatsapp.*" }, { workspace = "5" })
+o.window({ class = ".*[Dd]iscord.*" }, { workspace = "5" })
 
+-- Docker
 o.window({ class = ".*[Dd]ocker" }, { workspace = "6" })
 
+-- Writing and notes
 o.window({ class = ".*[Oo]bs.*" }, { workspace = "7" })
+o.window({ class = "^[Tt]ypora$" }, { workspace = "7" })
+o.window({ class = "^omawrite$" }, { workspace = "7" })
+o.window({ class = "^(1Password|1password|com\\.onepassword\\.OnePassword)$" }, { workspace = "7" })
+
+-- Herdr: always opens on workspace 8. SUPER + SHIFT + H launches it.
+o.window({ class = "^herdr-app$" }, { workspace = "8" })
+o.window({ class = "^org\\.omarchy\\.herdr$" }, { workspace = "8" })
+
+-- Media: wherever it is opened from, it lands on workspace 9.
+o.window({ class = "^spotify$" }, { workspace = "9" })
+o.window({ class = "^org\\.omarchy\\.cliamp$" }, { workspace = "9" })
