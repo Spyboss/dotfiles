@@ -7,8 +7,8 @@ Generated from the live compositor, not from memory:
 
 Hyprland 0.56.2, Omarchy 4.5.0-3, config provider: **lua**.
 
-Your `~/.config/hypr/bindings.lua` holds one personal binding (SUPER SHIFT + H).
-Everything else below is an Omarchy default.
+Your `~/.config/hypr/bindings.lua` holds one personal binding (SUPER SHIFT + H)
+and one removal (SUPER SHIFT + SLASH). Everything else is an Omarchy default.
 
 ---
 
@@ -22,7 +22,7 @@ Everything else below is an Omarchy default.
 | SUPER SHIFT ALT + B | Browser (private) | `omarchy-launch-browser --private` |
 | SUPER SHIFT + F | File manager | `omarchy-launch-nautilus` |
 | SUPER SHIFT ALT + F | File manager (cwd) | `omarchy-launch-nautilus-cwd` |
-| SUPER SHIFT + H | Herdr | `omarchy-launch-terminal-herdr` (also on SUPER CTRL + RETURN) |
+| SUPER SHIFT + H | Herdr desktop app | `omarchy-launch-or-focus ^herdr-app$ "uwsm-app -- herdr-app"` |
 | SUPER ALT + RETURN | Tmux | `omarchy-launch-terminal-tmux` |
 | SUPER CTRL + RETURN | Herdr | `omarchy-launch-terminal-herdr` |
 | SUPER SHIFT + N | Editor | `omarchy-launch-editor` |
@@ -33,7 +33,6 @@ Everything else below is an Omarchy default.
 | SUPER SHIFT + D | Docker | `omarchy-launch-tui omarchy-launch-docker-tui` |
 | SUPER SHIFT + G | Signal | `omarchy-launch-signal` |
 | SUPER SHIFT + Q | Calculator | `omacalc` |
-| SUPER SHIFT + SLASH | Passwords | `omarchy-launch-1password` |
 | SUPER SHIFT + A | ChatGPT | `omarchy-launch-webapp https://chatgpt.com` |
 | SUPER SHIFT ALT + A | Grok | `omarchy-launch-webapp https://grok.com` |
 | SUPER SHIFT + C | Calendar | `omarchy-launch-webapp https://app.hey.com/calendar/weeks/` |
@@ -172,18 +171,17 @@ Matching is against the window **class** unless noted.
 | 1 | `^(google-chrome\|chromium\|firefox)$` | ws 1 | Chrome |
 | 2 | `.*[Aa]lacritty\|.*[Gg]hostty\|.*[Kk]itty\|.*[Ff]oot` | ws 2 | foot, and every TUI run inside it |
 | 3 | `.*[Nn]autilus\|.*[Ff]iles` | ws 3 | org.gnome.Nautilus |
-| 4 | `.*[Cc]hat.*\|.*[Oo]pencode` | ws 4 | ChatGPT webapp |
+| 4 | `^mpv$` | ws 4 | mpv |
 | 5 | `.*[Ww]hatsapp.*\|.*[Ss]ignal\|.*[Tt]elegram` | ws 5 | WhatsApp webapp, Signal |
 | 5b | `.*[Dd]iscord.*` | ws 5 | Discord webapp |
 | 6 | `.*[Dd]ocker` | ws 6 | `org.omarchy.omarchy-launch-docker-tui` |
 | 7 | `.*[Oo]bs.*` | ws 7 | obsidian, and anything containing "obs" |
 | 7b | `^[Tt]ypora$` | ws 7 | Typora |
 | 7c | `^omawrite$` | ws 7 | Omawrite |
-| 7d | `^(1Password\|1password\|com\.onepassword\.OnePassword)$` | ws 7 | 1Password, when installed |
-| 8 | `^herdr-app$` + `^org\.omarchy\.herdr$` | ws 8 | Herdr, always |
+| 8 | `^herdr-app$` | ws 8 | Herdr desktop app, always |
 | 9 | `^spotify$` + `^org\.omarchy\.cliamp$` | ws 9 | Spotify and cliamp, wherever opened from |
 
-Not mapped: mpv, Slack (no rule, they open on the current workspace).
+Not mapped: Slack, and the ChatGPT webapp (opens on the current workspace).
 
 ## 7. Problems found
 
@@ -194,10 +192,11 @@ inert. Moved to `~/.config/hypr/archive-pre-quattro-20261113/`:
 Still live: `hypridle.conf`, `hyprlock.conf`, `hyprsunset.conf`, `xdph.conf`
 (read by their own programs, not by Hyprland).
 
-**Rule 4 can't work for opencode.** `opencode` runs inside foot, whose class is
-`foot`, so it hits rule 2 (ws 2) first. A class rule can never separate two
-terminals. Terminal apps launched via `omarchy-launch-tui` get their own class
-(`org.omarchy.<name>`), which is the only way to map them.
+**A class rule can't separate two terminals.** `opencode` runs inside foot,
+whose class is `foot`, so it hits rule 2 (ws 2). That no longer matters, since
+opencode is used inside Herdr now (ws 8). Terminal apps launched via
+`omarchy-launch-tui` get their own class (`org.omarchy.<name>`), which is the
+only way to map one.
 
 **Rule 7 is over-broad.** `.*[Oo]bs.*` matches any class containing "obs".
 Left as-is deliberately.
@@ -206,8 +205,19 @@ Left as-is deliberately.
 workspace. Omarchy's own rules use `workspace = "N silent"` when they don't
 want to steal focus.
 
-**`SUPER SHIFT + SLASH` (Passwords) points at 1Password, which is not
-installed.** The key currently does nothing.
+**`SUPER SHIFT + SLASH` (Passwords) removed.** Omarchy's default pointed it at
+1Password, which is not installed, so the key did nothing. Unbound in
+`bindings.lua` rather than left dangling.
+
+**ChatGPT has no workspace rule.** It is used inside the normal browser, which
+is already `google-chrome` on ws 1, so a `chat` rule would never fire. Omarchy's
+`SUPER SHIFT + A` does open a separate Chrome app window
+(`chrome-chatgpt.com__-Default`) which now opens on the current workspace.
+
+**Herdr uses the desktop app**, class `herdr-app`, not the TUI in a terminal.
+`SUPER SHIFT + H` focuses the running window instead of opening a second one.
+Omarchy's own `SUPER CTRL + RETURN` still starts the terminal TUI, and that one
+lands on ws 2 with the other terminals.
 
 **`ALT + TAB` has two bindings** — `cycle_next` then `bring_to_top`. That is
 deliberate upstream (see `bindings/tiling.lua:56-60`), not a bug.
