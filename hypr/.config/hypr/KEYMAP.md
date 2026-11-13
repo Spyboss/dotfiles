@@ -172,7 +172,7 @@ Matching is against the window **class** unless noted.
 | 2 | `.*[Aa]lacritty\|.*[Gg]hostty\|.*[Kk]itty\|.*[Ff]oot` | ws 2 | foot, and every TUI run inside it |
 | 3 | `.*[Nn]autilus\|.*[Ff]iles` | ws 3 | org.gnome.Nautilus |
 | 4 | `^mpv$` | ws 4 | mpv |
-| 5 | `.*[Ww]hatsapp.*\|.*[Ss]ignal\|.*[Tt]elegram` | ws 5 | WhatsApp webapp, Signal |
+| 5 | `.*[Ww]hatsapp.*\|.*[Ss]ignal` | ws 5 | WhatsApp webapp, Signal |
 | 5b | `.*[Dd]iscord.*` | ws 5 | Discord webapp |
 | 6 | `.*[Dd]ocker` | ws 6 | `org.omarchy.omarchy-launch-docker-tui` |
 | 7 | `.*[Oo]bs.*` | ws 7 | obsidian, and anything containing "obs" |
@@ -180,6 +180,12 @@ Matching is against the window **class** unless noted.
 | 7c | `^omawrite$` | ws 7 | Omawrite |
 | 8 | `^herdr-app$` | ws 8 | Herdr desktop app, always |
 | 9 | `^spotify$` + `^org\.omarchy\.cliamp$` | ws 9 | Spotify and cliamp, wherever opened from |
+| 10 | `^TelegramDesktop$` | ws 10 | Telegram, kept apart from WhatsApp and Signal |
+
+Telegram's class is `TelegramDesktop`, not the usual `org.telegram.desktop`,
+because this install is the manual tarball build (`~/Downloads/tsetup.6.6.2/`),
+not the flatpak. Reinstalling it as a flatpak would change the class and the
+rule would stop matching.
 
 Not mapped: Slack, and the ChatGPT webapp (opens on the current workspace).
 

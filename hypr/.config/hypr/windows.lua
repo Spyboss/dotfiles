@@ -15,7 +15,7 @@ o.window({ class = ".*[Nn]autilus|.*[Ff]iles" }, { workspace = "3" })
 o.window({ class = "^mpv$" }, { workspace = "4" })
 
 -- Messaging
-o.window({ class = ".*[Ww]hatsapp.*|.*[Ss]ignal|.*[Tt]elegram" }, { workspace = "5" })
+o.window({ class = ".*[Ww]hatsapp.*|.*[Ss]ignal" }, { workspace = "5" })
 o.window({ class = ".*[Dd]iscord.*" }, { workspace = "5" })
 
 -- Docker
@@ -32,3 +32,7 @@ o.window({ class = "^herdr-app$" }, { workspace = "8" })
 -- Media: wherever it is opened from, it lands on workspace 9.
 o.window({ class = "^spotify$" }, { workspace = "9" })
 o.window({ class = "^org\\.omarchy\\.cliamp$" }, { workspace = "9" })
+
+-- Telegram: kept apart from WhatsApp and Signal. Class is TelegramDesktop
+-- because this install is the manual tarball build, not the flatpak.
+o.window({ class = "^TelegramDesktop$" }, { workspace = "10" })
