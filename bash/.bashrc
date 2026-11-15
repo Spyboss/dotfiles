@@ -3,7 +3,23 @@
 
 # All the default Omarchy aliases and functions
 # (don't mess with these directly, just overwrite them here!)
-source ~/.local/share/omarchy/default/bash/rc
+unalias ga gd 2>/dev/null
+# /etc/omarchy.conf is written by omarchy-dev-link. When absent, force the
+# package default instead of preserving a stale inherited dev-link value before
+# we decide which rc file to source.
+if [[ -f /etc/omarchy.conf ]]; then
+  source /etc/omarchy.conf
+  export OMARCHY_PATH="${OMARCHY_PATH:-/usr/share/omarchy}"
+else
+  export OMARCHY_PATH=/usr/share/omarchy
+fi
+export PATH=/home/uminda/.opencode/bin:$PATH
+alias railway=/home/uminda/.local/share/mise/installs/node/24.15.0/lib/node_modules/@railway/cli/bin/railway
+
+# >>> Codex installer >>>
+export PATH="/home/uminda/.local/bin:$PATH"
+# <<< Codex installer <<<
+source "$OMARCHY_PATH/default/bash/rc"
 
 # Add your own exports, aliases, and functions here.
 #
@@ -34,8 +50,9 @@ alias v='nvim'
 # Quick system update (you already have omarchy-update, but this is handy)
 alias update='omarchy-update'
 
-# Tmux shortcut (use Omarchy default: tmux attach || tmux new -s Work)
-# alias t='tmux'  # Omarchy default
+# Tmux: start/attach session in current directory
+unalias t 2>/dev/null
+alias t='tmux new-session -A -s "$(basename "$(pwd)")" -c "$(pwd)"'
 alias ta='tmux attach -t'
 alias tls='tmux ls'
 
@@ -43,5 +60,9 @@ alias tls='tmux ls'
 alias dev='cd ~/dev'
 alias docs='cd ~/Documents'
 
-# opencode
-export PATH=/home/uminda/.opencode/bin:$PATH
+# dropstone
+export PATH=/home/uminda/.dropstone/bin:$PATH
+
+# ble.sh: fish-style faded autosuggestions and syntax highlighting for bash.
+# Installed per-user at ~/.local/share/blesh. Remove this block to undo.
+[[ $- == *i* ]] && source "$HOME/.local/share/blesh/ble.sh"
