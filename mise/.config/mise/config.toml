@@ -1,3 +1,6 @@
 [tools]
-codex = "latest"
+go = "1.27.3"
+herdr = "latest"
 node = "lts"
+
+[settings.upgrade]
