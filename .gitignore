@@ -2,3 +2,7 @@ opencode/.config/opencode/node_modules/
 opencode/.config/opencode/bun.lock
 opencode/.config/opencode/package-lock.json
 *.bak
+
+# Secrets: the background service password. Never track this file.
+opencode/.config/opencode/service.json
+service.json
